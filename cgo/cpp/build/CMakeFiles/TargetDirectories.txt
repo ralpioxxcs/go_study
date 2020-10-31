@@ -1,3 +1,0 @@
-/home/hong/gowork/src/github.com/ralpioxxcs/cgo/cpp/build/CMakeFiles/rebuild_cache.dir
-/home/hong/gowork/src/github.com/ralpioxxcs/cgo/cpp/build/CMakeFiles/foo.dir
-/home/hong/gowork/src/github.com/ralpioxxcs/cgo/cpp/build/CMakeFiles/edit_cache.dir
