@@ -1,9 +1,5 @@
 #include "foo.h"
 
-int test_c() {
-  std::cout << "test c" << std::endl;
-}
-
 Foo::Foo() {
   m_var = 10;
   std::cout << "Foo constructor" << std::endl;
@@ -11,11 +7,6 @@ Foo::Foo() {
 
 Foo::~Foo() {
   std::cout << "Foo destructor" << std::endl;
-}
-
-void Foo::test() {
-  m_var = 5;
-  std::cout << "Foo" << std::endl;
 }
 
 int Foo::add(int a, int b) {

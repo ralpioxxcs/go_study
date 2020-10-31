@@ -1,35 +1,50 @@
 package main
 
-// #cgo LDFLAGS: -ldl
 // #include <dlfcn.h>
+// #cgo LDFLAGS: -ldl
 import "C"
-import "fmt"
+
+import (
+        "fmt"
+      )
+const (
+	// dlopen() flags. See man dlopen.
+	RTLD_LAZY     = int(C.RTLD_LAZY)
+	RTLD_NOW      = int(C.RTLD_NOW)
+	RTLD_GLOBAL   = int(C.RTLD_GLOBAL)
+	RTLD_LOCAL    = int(C.RTLD_LOCAL)
+	RTLD_NODELETE = int(C.RTLD_NODELETE)
+	RTLD_NOLOAD   = int(C.RTLD_NOLOAD)
+)
 
 func main() {
   fmt.Println("Start main")
 
-  handle := C.dlopen(C.CString("libfoo.so"), C.RTLD_LAZY)
-  bar := C.dlsym(handle, C.CString("test_c"))
-  fmt.Println("bar is at %p\n", bar)
-  //p, err := plugin.Open("./cpp/lib/libfoo.so")
-  //if err != nil {
-  //  fmt.Println("fail")
-  //  panic(err)
-  //}
+  export_name := "test"
+  lib_path := "/usr/local/lib/libfoo.so"
 
-  //f, err := p.Lookup("foo")
-  //if err != nil {
-  //  panic(err)
-  //}
+  handle := C.dlopen(C.CString(lib_path), C.RTLD_LAZY)
+  if handle == nil {
+    fmt.Println(lib_path+":not found")
+    return
+  } else {
+    fmt.Println(lib_path+":SUCCESS")
+  }
 
-  //f.(func())()
+  func_ptr := C.dlsym(handle, C.CString(export_name))
+  if func_ptr == nil {
+    fmt.Println(export_name+":not found")
+    return
+  } else {
+    fmt.Println(export_name+":SUCCESS")
+  }
 
-  //f1, err := p.Lookup("add")
-  //if err != nil {
-  //  panic(err)
-  //}
 
-  //sum := f1.(func(int, int) int)(10,15)
+  fmt.Printf("func_ptr is at %p\n",func_ptr)
 
-  //fmt.Println(sum)
+  var vars func(d *C.char)
+  
+
+
+
 }

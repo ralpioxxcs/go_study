@@ -4,8 +4,6 @@
 #include <stdlib.h>
 #include <iostream>
 
-int test_c();
-
 class Foo
 {
 private:
@@ -15,7 +13,6 @@ public:
   Foo();
   virtual ~Foo();
 
-  void test();
   int add(int a, int b);
   int subtract(int a, int b);
 };
