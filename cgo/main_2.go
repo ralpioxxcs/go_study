@@ -19,8 +19,15 @@ func main() {
   if err := lib.Sym("test",&test); err != nil {
     panic(err)
   }
+  var add func(int, int, ...interface{}) int
+  if err := lib.Sym("Foo_add",&add); err != nil {
+    panic(err)
+  }
 
   test()
+
+  result := add(2,3)
+  fmt.Println(result)
 
 }
 
