@@ -6,7 +6,8 @@ import "C"
 
 import (
         "fmt"
-      )
+)
+
 const (
 	// dlopen() flags. See man dlopen.
 	RTLD_LAZY     = int(C.RTLD_LAZY)
