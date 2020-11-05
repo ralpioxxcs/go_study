@@ -4,8 +4,7 @@
 #include <stdlib.h>
 #include <iostream>
 
-class Foo
-{
+class Foo {
 private:
   uint8_t m_var;
 

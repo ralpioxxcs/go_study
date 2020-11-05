@@ -1,0 +1,6 @@
+INFO: 2020/11/05 23:32:28 logger.go:39: test
+INFO: 2020/11/05 23:35:06 logger.go:39: test
+INFO: 2020/11/05 23:35:06 server.go:12: Starting
+INFO: 2020/11/05 23:35:06 server.go:14: load cpp library
+INFO: 2020/11/05 23:35:06 load.go:19: Get symbols
+INFO: 2020/11/05 23:35:06 server.go:25: http server listen
