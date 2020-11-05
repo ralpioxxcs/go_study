@@ -36,12 +36,5 @@ func createLogger(fname string) *logger {
 	}
 	log.SetOutput(file)
 
-	loggerr.Println("test")
-
 	return &loggerr
-
-	// return &logger{
-	// 	filename: fname,
-	// 	Logger:   log.New(file, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile),
-	// }
 }
