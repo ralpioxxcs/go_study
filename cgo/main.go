@@ -9,6 +9,10 @@ import (
 	"strconv"
 )
 
+type Data struct {
+	Result int
+}
+
 func mainpage(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
 		http.Error(w, "404 not found!", http.StatusNotFound)
@@ -16,26 +20,44 @@ func mainpage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	t, _ := template.ParseFiles("static/index.html")
+
 	switch r.Method {
 	case "GET":
-	case "POST":
 		if err := r.ParseForm(); err != nil {
 			fmt.Fprintf(w, "ParseForm() err: %v", err)
 			return
 		}
 		a, _ := strconv.Atoi(r.FormValue("a"))
 		b, _ := strconv.Atoi(r.FormValue("b"))
-		fmt.Printf("a + b = %d\n", clib.Add_cpp(a, b))
+
+		d := Data{
+			Result: clib.Add_cpp(a, b),
+		}
+		fmt.Println(d)
+
+		t.Execute(w, d)
+
+		//Result := clib.Add_cpp(a, b)
+		//case "POST":
+		//  if err := r.ParseForm(); err != nil {
+		//    fmt.Fprintf(w, "ParseForm() err: %v", err)
+		//    return
+		//  }
+		//  a, _ := strconv.Atoi(r.FormValue("a"))
+		//  b, _ := strconv.Atoi(r.FormValue("b"))
+		//  fmt.Printf("a + b = %d\n", clib.Add_cpp(a, b))
+		//}
 	}
-	t.Execute(w, nil)
 }
 
 func create(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("crate button")
+	defer http.Redirect(w, r, "/", http.StatusFound)
 }
 
 func start(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("start button")
+	defer http.Redirect(w, r, "/", http.StatusFound)
 }
 
 func main() {
