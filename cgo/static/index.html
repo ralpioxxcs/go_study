@@ -14,13 +14,21 @@
 
 <body>
   <h1>Test Button Page</h1>
-  <!--<form method="POST" action="/create/">-->
   <form method="GET" action="/create">
-    <input type="submit" value="Create"/>
+    <input type="submit" value="Create" />
   </form>
   <form method="GET" action="/start">
-    <input type="submit" value="Start"/>
+    <input type="submit" value="Start" />
   </form>
+
+  <h1>Calculation</h1>
+  <form action="/" method="POST" accept-charset="utf-8">
+    <label>input A :</label><input type="text" name="a" value="0" id="a">
+    <label>input B :</label><input type="text" name="b" value="0" id="b">
+    =<output name="result"></output>
+    <input type="submit" value="calculate">
+  </form>
+
 </body>
 
 </html>

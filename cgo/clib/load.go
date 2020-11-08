@@ -1,23 +1,20 @@
 package clib
 
 import (
-  "fmt"
   "github.com/rainycape/dl"
-  "github.com/ralpioxxcs/cgo/mylogger"
+  "github.com/ralpioxxcs/go_study/cgo/mylogger"
 )
 
+// cpp symbol function variables in "libfoo.so"
 var add func(int, int, ...interface{}) int
 var subtract func(int, int, ...interface{}) int
 
-func Start() {
-  num1 := 5
-  num2 := 10
+func Add_cpp(a int, b int) int {
+  return add(a,b)
+}
 
-  result := add(num1, num2)
-  fmt.Println(result)
-
-  result2 := subtract(num2, num1)
-  fmt.Println(result2)
+func Subtract_cpp(a int, b int) int {
+  return subtract(a,b)
 }
 
 func LoadLib() {
@@ -26,7 +23,7 @@ func LoadLib() {
     panic(err)
   }
 
-  defer lib.Close()
+  //defer lib.Close()
 
   logger := mylogger.GetInstance()
 
