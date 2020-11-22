@@ -13,7 +13,14 @@
       <div id="video-container" style="background-color:gray; border:2px solid black">
         <img id="video" src="/video">
       </div>
-      <button style="color:red">Play</button>
+      <div id="button-container">
+        <form action="/Play" method="post">
+          <button type="submit" style="color:black">Play</button>
+        </form>
+        <form action="/Stop" method="post">
+          <button type="submit" style="color:black">Stop</button>
+        </form>
+      </div>
 </body>
 
 </html>
