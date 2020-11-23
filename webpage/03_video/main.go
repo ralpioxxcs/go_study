@@ -2,86 +2,66 @@ package main
 
 import (
 	"fmt"
-	"html/template"
-	"net/http"
-
-	"gocv.io/x/gocv"
-
 	"time"
+	"net/http"
+	"github.com/gin-gonic/gin"
+	"gocv.io/x/gocv"
 )
 
 var frame []byte
 var stop bool
 
 func main() {
-  fmt.Println("Start")
-	/*
-		if len(os.Args) < 2 {
-			fmt.Println("path is empty,, open webcam")
-			os.Exit(1)
-		}
-		fmt.Println("video path = " + os.Args[1])
+	fmt.Println("main()")
 
-		webcam, err := gocv.VideoCaptureFile(os.Args[1])
+	router := gin.Default()
+
+	// Play button
+	router.POST("/Play", func(c *gin.Context) {
+		webcam, err := gocv.VideoCaptureDevice(0)
 		if err != nil {
-			panic(err)
+			c.String(http.StatusOK, "Can't open webcam")
+			return
 		}
-		defer webcam.Close()
-	*/
+		stop = false
+		go stream(webcam)
+		c.Redirect(http.StatusMovedPermanently, "/")
+	})
 
-  // Set http server & handling functions
-  // Play buttons
-  http.HandleFunc("/Play", func(res http.ResponseWriter, req *http.Request) {
-    fmt.Println("Start to streaming webcam")
-    webcam, err := gocv.VideoCaptureDevice(0)
-    if err != nil {
-      fmt.Fprint(res, "can't open device")
-      return
-    }
+	// Stop button
+	router.POST("/Stop", func(c *gin.Context) {
+		stop = true
+		c.Redirect(http.StatusMovedPermanently, "/")
+	})
 
-    stop = false
-	  go stream(webcam)
-    http.Redirect(res, req, "/", http.StatusMovedPermanently)
-  })
-  // Stop buttons
-  http.HandleFunc("/Stop", func(res http.ResponseWriter, req *http.Request) {
-    fmt.Println("Stop to streaming webcam")
-    stop = true
-    http.Redirect(res, req, "/", http.StatusMovedPermanently)
-  })
-  // Video container
-	http.HandleFunc("/video", func(res http.ResponseWriter, req *http.Request) {
-		res.Header().Set("Content-Type", "multipart/x-mixed-replace; boundary=frame")
+	// Video
+	router.GET("/video", func(c *gin.Context) {
+		c.Writer.Header().Set("Content-Type", "multipart/x-mixed-replace; boundary=frame")
 		data := ""
 		for {
 			data = "--frame\r\n Content-Type: image/jpeg\r\n\r\n" + string(frame) + "\r\n\r\n"
 			time.Sleep(100 * time.Millisecond)
-			res.Write([]byte(data))
+			c.Writer.Write([]byte(data))
 		}
-	})
-  // Index
-	http.HandleFunc("/", func(res http.ResponseWriter, req *http.Request) {
-		t, err := template.ParseFiles("index.html")
-		if err != nil {
-			panic(err)
-		}
-		t.Execute(res, "index")
 	})
 
-	http.ListenAndServe(":8080", nil)
+  router.LoadHTMLGlob("html/*")
+	router.GET("/", func(c *gin.Context) {
+    c.HTML(http.StatusOK, "index.html", nil)
+	})
+
+  router.Run(":8080")
+
 }
-
 
 func stream(cap *gocv.VideoCapture) {
 	img := gocv.NewMat()
 	frameNum := 0
 	for {
-    if stop {
-      return
-    }
-
+		if stop {
+			return
+		}
 		//time.Sleep(10 * time.Millisecond)
-
 		if !cap.Read(&img) {
 			fmt.Println("video done")
 			return
