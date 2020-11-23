@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width" />
+  <title>VideoPlay</title>
+</head>
+
+<body>
+  <div class="container">
+    <div class="inner">
+      <div id="video-container">
+        <img id="video" src="/video">
+      </div>
+      <div id="button-container">
+        <form action="/Play" method="post">
+          <button type="submit" style="color:black">Play</button>
+        </form>
+        <form action="/Stop" method="post">
+          <button type="submit" style="color:black">Stop</button>
+        </form>
+      </div>
+      <div id="range-container">
+        <form oninput="x.value=parseInt(a.value)" action="/property/brightness" method="get">
+          Brightness<br>
+          <input type="range" id="a" name="Brightness" min="10" max="60" step="1">
+          <output name="x" for="a"></output><br>
+        </form>
+        <form oninput="x.value=parseInt(a.value)" action="/property/contrast" method="get">
+          Contrast<br>
+          <input type="range" id="a" name="Contrast" min="10" max="60" step="1">
+          <output name="x" for="a"></output><br>
+        </form>
+      </div>
+      <div id="frame-container">
+        <form action="/property/framesize" method="get">
+          Width  : <input type="text" id="width" name="width">
+          Height : <input type="text" id="height" name="height">
+          <input type="submit">
+        </form>
+      </div>
+</body>
+
+</html>
