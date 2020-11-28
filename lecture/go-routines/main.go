@@ -4,16 +4,25 @@ import "fmt"
 import "time"
 
 func main() {
-	c := make(chan bool)
-	people := [2]string{"nico", "flynn"}
+	c := make(chan string)
+	people := [5]string{"nico", "flynn", "thor", "peter", "larry"}
 	for _, person := range people {
 		go isSexy(person, c)
 	}
-	fmt.Println(<-c)
-	fmt.Println(<-c)
-	//go sexyCount("test")
-	//go sexyCount("hoho")
-	//time.Sleep(time.Second * 10)
+
+	for i := 0; i < len(people); i++ {
+		fmt.Print("waiting for", i)
+		fmt.Println(<-c) // blocking operation,, waiting channel
+	}
+
+	//resultOne := <-c
+	//resultTwo := <-c
+	//resultThree := <-c
+
+	//fmt.Println("Waiting for message")
+	//fmt.Println("Received this message:", resultOne)
+	//fmt.Println("Received this message:", resultTwo)
+	//fmt.Println("Received this message:", resultThree) // runtime error!
 }
 
 func sexyCount(person string) {
@@ -23,8 +32,7 @@ func sexyCount(person string) {
 	}
 }
 
-func isSexy(person string, c chan bool) {
+func isSexy(person string, c chan string) {
 	time.Sleep(time.Second * 5)
-	fmt.Println(person)
-	c <- true
+	c <- person + " is sexy"
 }
