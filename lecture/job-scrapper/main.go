@@ -1,9 +1,11 @@
 package main
 
 import (
+	//"encoding/csv"
 	"fmt"
 	"log"
 	"net/http"
+	//"os"
 	"strconv"
 	"strings"
 
@@ -38,18 +40,18 @@ func main() {
 	totalPages := getPages()
 	fmt.Println(totalPages)
 
-	for i := 0; i < totalPages; i++ {
+	for i := 0; i < 1; i++ {
 		go getPage(i, c)
-		//jobs = append(jobs, extractedJobs...) // meaning merge two arrays -> [] + [] => [ []+[] ]
+		// jobs = append(jobs, extractedJobs...) // meaning merge two arrays -> [] + [] => [ []+[] ]
 		// jobs = append(jobs, extractedJobs) // meaning merge two arrays -> [] + []
 	}
 
-	for i := 0; i < totalPages; i++ {
+	for i := 0; i < 1; i++ {
 		extractedJobs := <-c
 		jobs = append(jobs, extractedJobs...)
 	}
 
-	// code challenge - change writejobs func to go routines
+	// !! code challenge - change writejobs func to go routines
 	// -> change csv writer supporting concurrency!!
 	writeJobs(jobs)
 
@@ -133,6 +135,7 @@ func checkCode(res *http.Response) {
 }
 
 func writeJobs(jobs []extractedJob) {
+
 	//file, err := os.Create("jobs.csv")
 	//checkErr(err)
 
@@ -154,11 +157,6 @@ func writeJobs(jobs []extractedJob) {
 	// go routines
 	//###################################################
 
-	//file, err := os.Create("jobs.csv")
-	//checkErr(err)
-
-	//w := csv.NewWriter(file)
-	//defer w.Flush()
 	w, _ := ccsv.NewCsvWriter("jobs.csv")
 	defer w.Close()
 
@@ -177,6 +175,7 @@ func writeJobs(jobs []extractedJob) {
 	for i := 0; i < len(jobs); i++ {
 		<-done
 	}
+
 }
 
 func writeFile(w *ccsv.CsvWriter, jobSlice []string, done chan<- bool) {
