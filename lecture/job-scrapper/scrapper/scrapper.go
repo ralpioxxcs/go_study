@@ -21,8 +21,6 @@ type extractedJob struct {
 	summary  string
 }
 
-var baseURL string = "https://kr.indeed.com/jobs?q=python&limit=50"
-
 /*
 				       [main]
 
@@ -41,13 +39,15 @@ func Scrape(term string) {
 	totalPages := getPages(baseURL)
 	fmt.Println(totalPages)
 
-	for i := 0; i < 1; i++ {
+	//for i := 0; i < totalPages; i++ {
+	for i := 0; i < 2; i++ { // prevent many requesting
 		go getPage(i, baseURL, c)
 		// jobs = append(jobs, extractedJobs...) // meaning merge two arrays -> [] + [] => [ []+[] ]
 		// jobs = append(jobs, extractedJobs) // meaning merge two arrays -> [] + []
 	}
 
-	for i := 0; i < 1; i++ {
+	//for i := 0; i < totalPages; i++ {
+	for i := 0; i < 2; i++ {
 		extractedJobs := <-c
 		jobs = append(jobs, extractedJobs...)
 	}
@@ -64,7 +64,7 @@ func getPage(page int, url string, mainC chan<- []extractedJob) {
 
 	c := make(chan extractedJob)
 
-	pageURL := baseURL + "&start=" + strconv.Itoa(page*50)
+	pageURL := url + "&start=" + strconv.Itoa(page*50)
 	fmt.Println("Requesting", pageURL)
 	res, err := http.Get(pageURL)
 	checkErr(err)
@@ -107,7 +107,7 @@ func extractJob(card *goquery.Selection, c chan<- extractedJob) {
 
 func getPages(url string) int {
 	pages := 0
-	res, err := http.Get(baseURL)
+	res, err := http.Get(url)
 	checkErr(err)
 	checkCode(res)
 

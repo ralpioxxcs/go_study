@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/labstack/echo"
 	"github.com/ralpioxxcs/go_study/lecture/job-scrapper/scrapper"
+	"os"
 	"strings"
 )
 
@@ -14,7 +15,7 @@ func handleHome(c echo.Context) error {
 }
 
 func handleScrape(c echo.Context) error {
-	defer os.Remove(fileName)
+	defer os.Remove(fileName) // delete file
 	term := strings.ToLower(scrapper.CleanString(c.FormValue("term")))
 	scrapper.Scrape(term)
 
